@@ -35,6 +35,8 @@ Here are some ideas to get you started:
 
 ![Keonwoo Kim's GitHub stats](https://github-readme-stats.vercel.app/api?username=keonwoo98&theme=merko&show_icons=true)
 
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=keonwoo98&layout=compact)](https://github.com/keonwoo98/github-readme-stats)
+
 </br>
 
 ### **:mailbox: Contact Me :mailbox_closed:**
