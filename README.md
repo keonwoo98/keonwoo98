@@ -34,7 +34,7 @@ Here are some ideas to get you started:
 ### **:octocat: Github Stats :octocat:**
 <div align="left"><img src="https://github-readme-stats.vercel.app/api?username=keonwoo98&show_icons=true&count_private=true&hide_border=true" align="center" /></div>  
 
-![Keonwoo Kim's GitHub stats](https://github-readme-stats.vercel.app/api?username=keonwoo98=anuraghazra&theme=marko&show_icons=true)
+![Keonwoo Kim's GitHub stats](https://github-readme-stats.vercel.app/api?username=keonwoo98&theme=marko&show_icons=true)
 
 </br>
 
