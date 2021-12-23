@@ -36,7 +36,7 @@ Here are some ideas to get you started:
 
 </br>
 
-### **:mailbox: Connect Me :mailbox_closed:**
+### **:mailbox: Contact Me :mailbox_closed:**
 
 <p align="left">
 	<a href="https://velog.io/@dogfootbirdfoot"><img src="https://img.shields.io/badge/Tech%20Blog-11B48A?style=flat-square&logo=Vimeo&logoColor=white&link=https://velog.io/@dogfootbirdfoot"/></a>&nbsp
