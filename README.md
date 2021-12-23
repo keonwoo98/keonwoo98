@@ -1,4 +1,6 @@
-### Hi there 👋
+## Hi there 👋
+
+My name is Keonwoo Kim.
 
 <!--
 **keonwoo98/keonwoo98** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
@@ -14,3 +16,32 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->
+
+</br>
+
+### **🛠 Tech Skills 🛠**
+<div align="center">
+<img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/c-original.svg" alt="C" height="50" />
+<img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/cplusplus-original.svg" alt="C++" height="50" />
+<img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/mysql-original-wordmark.svg" alt="MySQL" height="50" />
+<img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/linux-original.svg" alt="Linux" height="50" />
+<img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/git-scm-icon.svg" alt="Git" height="50" />
+<img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/gnu_bash-icon.svg" alt="Bash" height="50" />
+</div>
+
+</br>
+
+### **:octocat: Github Stats**
+<div align="center"><img src="https://github-readme-stats.vercel.app/api?username=keonwoo98&show_icons=true&count_private=true&hide_border=true" align="center" /></div>  
+
+</br>
+
+### **Connect with me**
+
+<p align="center">
+	<a href="https://velog.io/@dogfootbirdfoot"><img src="https://img.shields.io/badge/Tech%20Blog-11B48A?style=flat-square&logo=Vimeo&logoColor=white&link=https://velog.io/@dogfootbirdfoot"/></a>&nbsp
+	<a href="https://www.instagram.com/keonwoo98"><img src="https://img.shields.io/badge/Instagram-E4405F?style=flat-square&logo=Instagram&logoColor=white&link=https://www.instagram.com/keonwoo98"/></a>&nbsp
+	<a href="mailto:keonwoo98@naver.com"><img src="https://img.shields.io/badge/Gmail-d14836?style=flat-square&logo=Gmail&logoColor=white&link=keonwoo98@naver.com"/></a>
+</p>
+
+</br>
