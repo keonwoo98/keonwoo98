@@ -20,7 +20,7 @@ Here are some ideas to get you started:
 </br>
 
 ### **🛠 Tech Skills 🛠**
-<div align="center">
+<div align="left">
 <img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/c-original.svg" alt="C" height="50" />
 <img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/cplusplus-original.svg" alt="C++" height="50" />
 <img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/mysql-original-wordmark.svg" alt="MySQL" height="50" />
@@ -31,12 +31,12 @@ Here are some ideas to get you started:
 
 </br>
 
-### **:octocat: Github Stats**
+### **:octocat: Github Stats :octocat:**
 <div align="center"><img src="https://github-readme-stats.vercel.app/api?username=keonwoo98&show_icons=true&count_private=true&hide_border=true" align="center" /></div>  
 
 </br>
 
-### **Connect with me**
+### **:mailbox: Connect Me :mailbox_closed:**
 
 <p align="center">
 	<a href="https://velog.io/@dogfootbirdfoot"><img src="https://img.shields.io/badge/Tech%20Blog-11B48A?style=flat-square&logo=Vimeo&logoColor=white&link=https://velog.io/@dogfootbirdfoot"/></a>&nbsp
