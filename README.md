@@ -35,9 +35,9 @@ Here are some ideas to get you started:
 
 ![Keonwoo Kim's GitHub stats](https://github-readme-stats.vercel.app/api?username=keonwoo98&theme=merko&show_icons=true)
 
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=keonwoo98&layout=compact&theme=merko)](https://github.com/keonwoo98/github-readme-stats)
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=keonwoo98&layout=compact&theme=merko)](https://github.com/keonwoo98/github-readme-stats)
 
-<img align='left' src="http://mazassumnida.wtf/api/v2/generate_badge?boj=keonwoo98">
+![BOJ Tier]("http://mazassumnida.wtf/api/v2/generate_badge?boj=keonwoo98")
 
 </br>
 
