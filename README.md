@@ -40,7 +40,7 @@ Here are some ideas to get you started:
 
 </br>
 
-### **:octocat: Github Stats :octocat:**
+### **Github Stats**
 
 ![Keonwoo Kim's GitHub stats](https://github-readme-stats.vercel.app/api?username=keonwoo98&theme=merko&show_icons=true)
 
@@ -52,7 +52,7 @@ Here are some ideas to get you started:
 
 </br>
 
-### **:mailbox: Contact Me :mailbox_closed:**
+### **Contact Me**
 
 <p align="left">
 	<a href="https://velog.io/@dogfootbirdfoot"><img src="https://img.shields.io/badge/Tech%20Blog-11B48A?style=flat-round&logo=Vimeo&logoColor=white&link=https://velog.io/@dogfootbirdfoot"/></a>&nbsp
