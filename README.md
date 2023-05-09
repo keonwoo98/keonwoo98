@@ -40,7 +40,7 @@ Here are some ideas to get you started:
 
 </br>
 
-### **Github Stats**
+### **:octocat: Github Stats :octocat:**
 
 ![Keonwoo Kim's GitHub stats](https://github-readme-stats.vercel.app/api?username=keonwoo98&theme=merko&show_icons=true)
 
@@ -52,12 +52,12 @@ Here are some ideas to get you started:
 
 </br>
 
-### **Contact Me**
+### **:mailbox: Contact Me :mailbox_closed:**
 
 <p align="left">
 	<a href="https://velog.io/@dogfootbirdfoot"><img src="https://img.shields.io/badge/Tech%20Blog-11B48A?style=flat-round&logo=Vimeo&logoColor=white&link=https://velog.io/@dogfootbirdfoot"/></a>&nbsp
 	<a href="https://www.instagram.com/keonwoo98"><img src="https://img.shields.io/badge/Instagram-E4405F?style=flat-round&logo=Instagram&logoColor=white&link=https://www.instagram.com/keonwoo98"/></a>&nbsp
-	<a href="mailto:keonwoo98@naver.com"><img src="https://img.shields.io/badge/Gmail-d14836?style=flat-round&logo=Gmail&logoColor=white&link=keonwoo98@naver.com"/></a>
+	<a href="mailto:keonwookim98@gmail.com"><img src="https://img.shields.io/badge/Gmail-d14836?style=flat-round&logo=Gmail&logoColor=white&link=keonwoo98@naver.com"/></a>
 </p>
 
 </br>
