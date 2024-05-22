@@ -21,12 +21,12 @@ Here are some ideas to get you started:
 
 </br>
 
-### **🧑‍💻 About Me 🧑‍💼**
+### **🧑‍💻 About Me**
 I thrive in collaborative environments and am always eager to learn and adapt to new technologies. My experience includes leading teams using Agile methodologies, optimizing CI/CD processes, and ensuring high code quality through extensive peer reviews. I’m also passionate about open-source contributions and enjoy sharing my knowledge and learning from the developer community.
 
 </br>
 
-### **🛠 Tech Skills 🛠**
+### **🛠 Tech Skills**
 
 <div align="left">
 	<a href="https://www.cprogramming.com/" target="_blank"><img style="margin: 10px" src="https://profilinator.rishav.dev/skills-assets/c-original.svg" alt="C" height="50" /></a>  
@@ -49,7 +49,7 @@ I thrive in collaborative environments and am always eager to learn and adapt to
 
 </br>
 
-### **:octocat: Github Stats :octocat:**
+### **:octocat: Github Stats**
 
 ![Keonwoo Kim's GitHub stats](https://github-readme-stats.vercel.app/api?username=keonwoo98&theme=merko&show_icons=true)
 
@@ -61,7 +61,7 @@ I thrive in collaborative environments and am always eager to learn and adapt to
 
 </br>
 
-### **:mailbox: Get in Touch :mailbox_closed:**
+### **:mailbox: Get in Touch**
 
 <p align="left">
 	<a href="https://velog.io/@dogfootbirdfoot"><img src="https://img.shields.io/badge/Tech%20Blog-11B48A?style=flat-round&logo=Vimeo&logoColor=white&link=https://velog.io/@dogfootbirdfoot"/></a>&nbsp
