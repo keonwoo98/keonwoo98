@@ -21,25 +21,7 @@ Here are some ideas to get you started:
 
 </br>
 
-### **🚀 Notable Projects**
-
-• Developed a real-time chatting and gaming platform using TypeScript, Next.js, and Socket IO.
-
-• Created a basic shell in C, mimicking the functionality of bash.
-
-• Built a 3D rendering engine using ray casting techniques.
-
-• Developed an asynchronous HTTP server based on I/O multiplexing.
-
-• Managed Kubernetes clusters for efficient deployment of web applications, utilizing tools like K3s, K3d, Vagrant, and Argo CD to enhance CI/CD workflows.
-
-• Designed and executed multiple mobile apps with Flutter, integrating real-time APIs and robust data management using Firebase.
-
-• Contributed to performance enhancements and code comprehension for the open-source CUBRID DBMS, delivering in-depth analyses and presentations.
-
-• Developed an introductory computer vision assignment for global 42 students, winning the 42 Seoul Hackathon and presenting the project across international campuses.
-
-### **🌍 About Me**
+### **🧑‍💻 About Me 🧑‍💼**
 I thrive in collaborative environments and am always eager to learn and adapt to new technologies. My experience includes leading teams using Agile methodologies, optimizing CI/CD processes, and ensuring high code quality through extensive peer reviews. I’m also passionate about open-source contributions and enjoy sharing my knowledge and learning from the developer community.
 
 </br>
