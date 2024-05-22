@@ -1,6 +1,8 @@
 ### Hi there 👋
 
-My name is **Keonwoo Kim**.
+I’m Keonwoo Kim!
+
+I’m a passionate software developer with a strong foundation in both web and mobile application development. My journey in software engineering has been shaped by rigorous, hands-on training at École 42 in Seoul and Paris, where I’ve tackled complex projects and honed my problem-solving skills.
 
 <!--
 **keonwoo98/keonwoo98** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
@@ -16,6 +18,18 @@ Here are some ideas to get you started:
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 -->
+
+</br>
+
+### **🚀 Notable Projects**
+
+• Developed a real-time chatting and gaming platform using TypeScript, Next.js, and Socket IO.
+• Created a basic shell in C, mimicking the functionality of bash.
+• Built a 3D rendering engine using ray casting techniques.
+• Developed an asynchronous HTTP server based on I/O multiplexing.
+
+### **🌍 About Me**
+I thrive in collaborative environments and am always eager to learn and adapt to new technologies. My experience includes leading teams using Agile methodologies, optimizing CI/CD processes, and ensuring high code quality through extensive peer reviews. I’m also passionate about open-source contributions and enjoy sharing my knowledge and learning from the developer community.
 
 </br>
 
@@ -54,7 +68,7 @@ Here are some ideas to get you started:
 
 </br>
 
-### **:mailbox: Contact Me :mailbox_closed:**
+### **:mailbox: Get in Touch :mailbox_closed:**
 
 <p align="left">
 	<a href="https://velog.io/@dogfootbirdfoot"><img src="https://img.shields.io/badge/Tech%20Blog-11B48A?style=flat-round&logo=Vimeo&logoColor=white&link=https://velog.io/@dogfootbirdfoot"/></a>&nbsp
