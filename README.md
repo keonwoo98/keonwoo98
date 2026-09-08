@@ -12,7 +12,7 @@ AI engineer in Paris. I build LLM systems that have to be right, and run them in
 | | What it does | How it's built | Status |
 |---|---|---|---|
 | **[Bonjour Admin](https://bonjouradmin.com)** | Personalised, verified answers on French administration in six languages, from actual law | Hybrid RAG (pgvector, RRF, Cohere rerank) → agentic tool loop → three parallel verifiers · LLM-as-judge evals · per-stage cost telemetry · Next.js, Supabase, OpenAI Responses API | Live, paying subscribers. Founder, sole engineer |
-| **SonnanAI** | Real-time Korean → French interpretation for a Paris church, live subtitles and speech | Silero VAD → cloud STT with local Whisper fallback → weekly cache → Qwen2.5-7B LoRA on Ollama → cloud → TTS · fully offline path · logprob hallucination gate | Live every Sunday since March 2026 |
+| **SonnanAI** | Real-time Korean → French interpretation for a Paris church, live subtitles and speech | Silero VAD → cloud STT with local Whisper fallback → weekly cache → Qwen2.5-7B LoRA on Ollama → cloud → TTS · fully offline path · logprob hallucination gate | Live every Sunday |
 | **Belage** | Booking, payments and French statutory invoicing for a Paris photo studio | Next.js · Supabase/Postgres (RLS, PL/pgSQL) · SumUp online + card-present · Google Calendar sync · six languages | In production, run alone |
 
 <!-- Optional: a 10–15 s screen recording of Bonjour Admin answering a question. Save as assets/bonjour-admin.gif (keep under 5 MB) and uncomment:
