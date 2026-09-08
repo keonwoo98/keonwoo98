@@ -1,20 +1,17 @@
-### Hi, I'm Keonwoo 👋
+### Keonwoo Kim
 
-Full-Stack & AI Engineer. I like taking a product all the way from the model to real users, usually on my own. Right now I'm wrapping up at École 42 Paris and building around LLMs: RAG, fine-tuning, agents, plus the full stack around them.
+AI engineer in Paris. I build LLM systems that have to be right, and run them in production, mostly alone.
 
-Before this I spent a year at Polyfact (a Paris startup), where I owned an LLM/RAG pipeline over 10M+ political records and went from intern to full-time in six months.
+**Now**
 
-### 🚀 What I'm building
+- [Bonjour Admin](https://bonjouradmin.com) — personalised, verified answers on French administration in six languages. Hybrid RAG (pgvector, RRF, Cohere rerank), an agentic tool loop, three parallel verifiers, LLM-as-judge evals, per-stage cost telemetry. Paying subscribers. Founder and sole engineer.
+- SonnanAI — real-time Korean → French interpretation for a Paris church, live every Sunday. Silero VAD → cloud STT with local Whisper fallback → three-tier translation (weekly cache → Qwen2.5-7B LoRA on Ollama → cloud) → TTS, with a fully offline path.
+- Belage — booking, payments and French statutory invoicing for a Paris photo studio. Next.js, Supabase/Postgres (RLS, PL/pgSQL), SumUp.
 
-- [Bonjour Admin](https://bonjouradmin.com) — an AI assistant for French bureaucracy in 6 languages. RAG over French law, live with paying users.
-- SonnanAI — real-time Korean→French sermon translation for a church in Paris. Fine-tuned local model, runs every week, keeps working offline.
-- Belage — booking and payment software a photo studio runs its week on.
+**Before**: AI Software Engineer at Polyfact, a Paris policy-intelligence startup (2024–2025). Built the LLM backend from an empty repo, introduced RAG (Pinecone, then Turbopuffer) and LangChain/LangGraph/LangSmith, owned monitoring across four services. Intern to permanent contract in six months.
 
-</br>
+**What you can read here**: the products above are closed-source. The public repos are the École 42 track, written from scratch without ML frameworks: a numpy MLP with hand-derived backpropagation (gradient-checked to 1.72e-10), EEG CSP matching SciPy to 1e-15, a CNN classifier at 99.79% held-out, a Q-learning snake, a Rust Gomoku engine (Negamax, null-move pruning, Lazy SMP), an x86 kernel in three stages (KFS-1 → KFS-3), and from 42 Seoul an HTTP/1.1 server in C++98 and the hackathon Grand Prize project (42_Eduthon, Minister of Science and ICT Award).
 
-### **:mailbox: Get in Touch**
+Python · TypeScript · C / C++ · Rust · Postgres / pgvector · Next.js · FastAPI · LangGraph · Ollama
 
-<p align="left">
-	<a href="https://www.instagram.com/keonwoo98"><img src="https://img.shields.io/badge/Instagram-E4405F?style=flat-round&logo=Instagram&logoColor=white&link=https://www.instagram.com/keonwoo98"/></a>&nbsp
-	<a href="mailto:keonwookim98@gmail.com"><img src="https://img.shields.io/badge/Gmail-d14836?style=flat-round&logo=Gmail&logoColor=white&link=keonwoo98@naver.com"/></a>
-</p>
+[LinkedIn](https://www.linkedin.com/in/keonwoo-kim-profile/) · [CV (PDF)](https://github.com/keonwoo98/keonwoo98/blob/main/Kim_Keonwoo_CV.pdf) · keonwookim98@gmail.com
