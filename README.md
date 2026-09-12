@@ -21,7 +21,9 @@ AI engineer in Paris. I build LLM systems that have to be right, and run them in
 
 ## Before
 
-**AI Software Engineer, Polyfact** (Paris policy-intelligence startup, 2024–2025). Built the LLM backend from an empty repo, introduced RAG (Pinecone, then Turbopuffer) and LangChain/LangGraph/LangSmith, owned monitoring across four services. Intern to permanent contract in six months.
+**AI Software Engineer, Polyfact** (Paris policy-intelligence startup, 2024–2025). Built the LLM backend from an empty repo, introduced RAG (Pinecone, then Turbopuffer) and LangChain/LangGraph/LangSmith, owned monitoring across four services. Joined as an intern and was asked to stay on after six months.
+
+**The long version:** [Experience in detail](EXPERIENCE.md) · [경력 상세 (한국어)](EXPERIENCE.ko.md) — what the problem was, what I decided, and how it turned out.
 
 ## What you can read here
 
