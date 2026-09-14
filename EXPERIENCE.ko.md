@@ -57,7 +57,7 @@ English: [EXPERIENCE.md](EXPERIENCE.md) · [LinkedIn](https://www.linkedin.com/i
 
 **모든 브랜드를 담는 Postgres schema 하나.** 전 브랜드 고객 사이트와 백오피스(스케줄, 직원 권한, 인보이스)를 단일 DB Schema로 통합 운영한다. 예약·결제 상태 전이 및 인보이스 생성 로직을 RLS 및 Server-side Role Check 검증 후 단일 트랜잭션 PL/pgSQL RPC로 처리하여, 프로세스 중단 시 불완전한 예약 데이터가 남지 않도록 데이터 정합성을 보장했다.
 
-**결제 정합성 (SumUp).** 온라인 결제와 매장 카드 결제 파이프라인을 단일 Atomic Settlement Path로 통합했다. Idempotent Webhook을 수신하고 Payment Provider 조회를 통해 2차 검증하며, 브라우저 단에서 누락된 결제건은 Reconciliation Cron이 찾아내 보정한다. 환불 credit note는 Provider 정산 확인 완료 상태를 검증한 후 자동 발행된다.
+**결제 정합성 (SumUp).** 온라인 결제와 현장 카드 결제 파이프라인을 단일 Atomic Settlement Path로 통합했다. Idempotent Webhook을 수신하고 Payment Provider 조회를 통해 2차 검증하며, 브라우저 단에서 누락된 결제건은 Reconciliation Cron이 찾아내 보정한다. 환불 credit note는 Provider 정산 확인 완료 상태를 검증한 후 자동 발행된다.
 
 **프랑스 법에 맞춘 인보이싱.** 프랑스 법정 Facture/Avoir 번호 규격(CGI art. 242 nonies A)의 누락 및 중복 방지를 위해 Atomic Counter 제어 및 DB Constraint 이중 안전장치를 구축했다. 정산 확정 시 PDF 인보이스 자동 발송, 국세청 현금영수증 내역 export 및 pg_cron 기반 자동 리마인더 파이프라인을 구현했다.
 
