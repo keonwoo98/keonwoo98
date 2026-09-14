@@ -28,13 +28,15 @@ The French National Assembly, the Senate, and the EU Parliament stream hundreds 
 
 **App-Wide Unified Search.** Users frequently search without knowing whether a resource is categorized as a politician, document, amendment, or video. I consolidated fragmented page searches into a single Spotlight-style global search box, executing keyword and vector embedding searches in parallel. This enables semantic discovery across politicians, documents, amendments, videos, and agendas even when search terms do not match verbatim.
 
-**Sub-Second Answer Latency Optimization.** Document Q&A initially reprocessed entire documents from scratch, leading to 10–15 second latency per response. I eliminated duplicate data fetches, converted independent execution stages into non-blocking parallel async routines, and re-budgeted token allocations. Incorporating response streaming and caching brought end-to-end response times down to under 2 seconds.
+**Answer Latency from 10–15 s to Under 2 s.** Document Q&A initially reprocessed entire documents from scratch, leading to 10–15 second latency per response. I eliminated duplicate data fetches, converted independent execution stages into non-blocking parallel async routines, and re-budgeted token allocations. Incorporating response streaming and caching brought end-to-end response times down to under 2 seconds.
 
 **AI Backend Architecture and Stack Migrations.** I engineered Polyfact's dedicated AI backend from an empty repository, serving as the foundational platform for all subsequent AI capabilities. Per-request token cost logging was built in from version 1. When generation requests queued up, I identified blocking I/O within synchronous libraries as the bottleneck and refactored the pipeline to be fully async to expand concurrency, while shifting 100-page document structuring to a streaming progress architecture. I managed tech stack migrations as scale demanded: moving from Python FastAPI to Deno to fix frontend type drift, consolidating ~10 fragmented microservices into a Turborepo monorepo to eliminate duplicate code, and eventually migrating to Node.js when cutting-edge AI and vector DB libraries lacked Deno runtime support. Each migration was executed via dual-run side-by-side deployments, shifting traffic endpoint-by-endpoint with immediate rollback capabilities to guarantee zero service downtime. The frontend was upgraded to Svelte 5 as soon as it reached production stability.
 
 **Observability Infrastructure.** To shift away from reactive debugging based on user complaints, I overhauled backend error handling to route logs through a shared logger to Sentry, reaching 4 microservices without call-site code changes and alerting the team on Discord. I instrumented OpenTelemetry to profile stage latency across frontend, API, database, and LLM calls, and used PostHog to analyze user traffic flows. When transcript latency spiked during a Senate livestream, tracing identified a chunking bottleneck that was patched the same day. After discovering Deno Deploy runtime limitations with custom OTel flags, I expanded Sentry's coverage, migrated new workloads to GCP, and led the technical decision to transition to Node.js.
 
-**Engineering Standards and Tooling.** I introduced and owned LangChain, LangGraph, and LangSmith across chat and reporting agents, evaluating new LLMs and API features on our internal output datasets to ship updates within days of release. To address missing citation URLs in OpenAI's API at the time, I integrated Tavily Search directly into the retrieval pipeline. I established team-wide standards including RFC 7807 compliant structured error responses, an observability guide, and AI coding rules files, while leading parallel refactoring of shared packages via per-owner TODOs and reviewing the majority of team PRs.
+**Adopting New Tools.** I introduced and owned LangChain, LangGraph, and LangSmith across chat and reporting agents. New LLMs and API features were validated on our own service outputs rather than benchmark scores, and shipped to production within days of release. To address missing citation URLs in OpenAI's API at the time, I integrated Tavily Search directly into the retrieval pipeline.
+
+**Team Engineering Standards.** I established and rolled out RFC 7807 structured error responses, an observability guide for the team, and rules files for AI coding tools. For shared-package refactors, I split the work into per-owner TODOs so the migration ran in parallel through small PRs, and I reviewed the majority of the team's PRs.
 
 I also built the agenda workspace, bills and text documents pages, custom alerts engine, and user settings pages from scratch.
 
@@ -45,7 +47,7 @@ I also built the agenda workspace, bills and text documents pages, custom alerts
 ## Belage — Freelance Full-Stack Engineer
 **Oct 2025 – Sep 2026 · Paris**
 
-A multi-brand photo studio operated without a web presence, taking bookings via Google Forms, manually transcribing data, and handling consultations, payments, and invoicing on paper. I built and operate the entire technical stack single-handedly—from customer-facing sites to back-office management systems—automating all underlying operations.
+A multi-brand photo studio ran without a website: bookings arrived through Google Forms and were copied over by hand, consultations happened manually over messengers, and payments and invoicing were handled by hand. I built and operate the entire technical stack single-handedly—from customer-facing sites to back-office management systems—automating that work.
 
 `Next.js` `TypeScript` `Supabase/Postgres (RLS, PL/pgSQL, pg_cron)` `SumUp (online + card-present)` `Google Calendar API` `Vercel` `pgTAP`
 
@@ -72,13 +74,13 @@ Foreigners in France face highly individual administrative requirements where in
 
 `Next.js 16 / React 19` `TypeScript` `Supabase + pgvector` `OpenAI Responses API` `Cohere rerank` `Upstash Redis` `Polar.sh` `PostHog` `Vercel`
 
-**Personalized Retrieval Engine.** Designed profile-aware retrieval matching user context (nationality, region, visa status, family, profession) to apply tag filters, RRF score boosts, and dynamic legal framework selection. Reverse-engineered and integrated parsers mapping 110+ endpoints from official immigration portals to incorporate user-linked portal data into answer generation.
+**Personalized Retrieval Engine.** The same question has different answers depending on who asks. A user profile (nationality, region, visa status, family, profession) drives tag filters, RRF score boosts, and selection of the applicable legal framework. When users link their data from the French immigration portal (ANEF), it is parsed against 13 portal endpoints I mapped by reverse-engineering and fed into answer generation.
 
-**Ground Truth Data Pipeline.** Configured daily automated syncing of 6 Légifrance legal codes, weekly recrawling of 15 government portals, web search restricted to a 55-domain whitelist, and a version-controlled legal database for statutory numbers and thresholds.
+**Ground Truth Data Pipeline.** Six French legal codes are synced daily from Légifrance. Official sources such as Service-Public, étudiant.gouv, France Travail, and Welcome to France are recrawled weekly based on freshness. Legal pre-search is restricted to 55 official domains and web search to a 66-domain allowlist, and statutory figures live in a version-controlled facts table used as ground truth.
 
-**Multi-Stage Retrieval and Verification.** Built a multi-tier pipeline: Retrieval Gate → Semantic Cache → Weighted RRF over full-text and dual embeddings (pgvector) → Cohere Rerank → Quality Gate. When retrieval confidence falls short, the Quality Gate rejects initial results, triggering agentic tool searches over official sources. The agent executes up to 3 tool-calling rounds across 10 functions, validating draft answers via 3 parallel verifiers (CRAG, legal-reference existence, citation entailment). Model-generated SQL queries execute under sandboxed anonymous database roles restricted to 4 public fact tables.
+**Multi-Stage Retrieval and Verification.** Built a multi-tier pipeline: Retrieval Gate → Semantic Cache → Weighted RRF over full-text and dual embeddings (pgvector) → Cohere Rerank → Quality Gate. When retrieval confidence falls short, the Quality Gate rejects initial results, triggering agentic tool searches over official sources. The agent runs up to 3 tool-calling rounds over 10 tools (9 functions plus web search), validating draft answers via 3 parallel verifiers (CRAG, legal-reference existence, citation entailment). Model-generated SQL runs through a read-only RPC under the anonymous database role, which can read only 4 public fact tables.
 
-**Telemetry-Driven Performance Tuning.** Instrumented stage-level cost telemetry, revealing that verification accounted for 80% of total spend and web pre-search consumed 49% of legal answer latency. Restricting pre-search execution to stale cache states cut search latency from 18s to 0.9s, while the Retrieval Gate bypasses 60–70% of unnecessary searches on follow-up questions.
+**Measuring Cost and Latency Before Cutting.** Per-stage usage tracking showed that web pre-search accounted for 49% of the $0.097 cost of a legal answer and added 10–15 s to time-to-first-token whenever it outlived the RAG leg, while the main agent loop already forced a web search on legal queries. I switched pre-search to run only when the top retrieved chunks are older than 14 days or retrieval returns nothing, keeping the old behaviour as a one-constant rollback. Earlier, replacing the search index with a lighter one that fits in memory and adding a French-specific index cut database search from ~18 s to ~0.9 s, and regrouping a seven-step sequential pipeline into three parallel stages brought full responses from ~69 s to ~55 s. Keeping legal queries on a smaller main model instead of auto-escalating them to gpt-5.4 cut their estimated cost by 60–70%, and the Retrieval Gate skips new searches on follow-ups, clarifications, and greetings.
 
 **Continuous Eval Pipeline for Statutory Changes.** Established an evaluation suite of 100+ cases evaluated via 6 LLM-as-judge metrics alongside non-LLM deterministic metrics. Test cases for statutory figures dynamically read expected ground truth from versioned fact tables at runtime, ensuring test suites automatically adapt to legislative updates without code modifications. Runs weekly in CI, failing builds on regression.
 
@@ -87,22 +89,22 @@ Foreigners in France face highly individual administrative requirements where in
 ### SonnanAI — AI Software Engineer
 **Jan 2026 – Present · Paris**
 
-Automated Korean-to-French real-time speech translation and subtitle generation for live church events in Paris, replacing manual volunteer interpretation with a fully automated live audio pipeline.
+Automated Korean-to-French real-time speech translation and subtitle generation for live church services in Paris, replacing manual interpretation with a fully automated live audio pipeline.
 
 `Python` `Flask (SSE)` `Silero VAD` `OpenAI transcribe + local Whisper` `Qwen2.5-7B LoRA` `Ollama` `pytest`
 
 **High-Availability Live Audio Pipeline.** Engineered a fault-tolerant 3-tier fallback architecture resilient to local network drops and cloud API outages. Implemented Silero VAD segmentation, automated failover from Cloud STT to Local Whisper, and a 3-tier translation layer (Weekly Cache → Local LoRA → Cloud). Enforced an 8-second wall-clock limit via request hedging, added cloud STT circuit breakers, and built a fully offline execution path.
 
-**Domain LoRA Fine-Tuning and Distillation.** Normalized and sentence-aligned 3 years of bilingual audio archives into ~8K parallel training pairs to fine-tune Qwen2.5-7B LoRA, served locally via Ollama. Constructed an automated distillation flywheel accumulating session context into retraining datasets while maintaining strict isolation between training and evaluation splits.
+**Domain LoRA Fine-Tuning and Distillation.** Normalized and sentence-aligned three years (2023–2025) of Korean–French sermon translations into ~8K parallel pairs to fine-tune Qwen2.5-7B with LoRA, served locally via Ollama. Constructed an automated distillation flywheel accumulating session context into retraining datasets while maintaining strict isolation between training and evaluation splits.
 
-**Empirical Logprob Guarding.** Filtered STT hallucination in silent audio segments using logprob distributions measured from live sessions (speech > -0.12, hallucinations < -1.3). Across 23 live sessions, weekly pre-translation caching absorbed ~18% of total speech utterances (ranging from 3% to 52% depending on session topic).
+**Empirical Logprob Guarding.** Filtered STT hallucination in silent audio segments using logprob distributions measured from live sessions (speech > -0.12, hallucinations < -1.3). Across 23 live sessions, the weekly pre-translation cache absorbed ~18% of all utterances, ranging from 3% to 52% per session depending on how closely the preacher followed the prepared script.
 
 ---
 
 ## École 42 Paris — IT Architecture Expert, RNCP 7 (Master's level)
 **Oct 2023 – Oct 2026 · Paris**
 
-Specialized in Data and Database Architecture. Completed 28 peer-reviewed computer science projects emphasizing bottom-up implementation without external libraries.
+Specialized in Data and Database Architecture. Completed 28 peer-reviewed projects with no teachers or lectures, building from the bottom up without external libraries and checking outputs against reference values.
 
 ### AI / ML
 
@@ -112,26 +114,26 @@ Specialized in Data and Database Architecture. Completed 28 peer-reviewed comput
 
 **[CNN leaf-disease classifier](https://github.com/keonwoo98/Leaffliction) (PyTorch).** Designed a custom 4-block CNN architecture. Investigated an initial 100% validation accuracy anomaly, discovering data leakage caused by applying data augmentation prior to dataset splitting. Corrected the pipeline to split datasets prior to augmentation, achieving 99.79% held-out test accuracy (matching a fine-tuned EfficientNet-B0 at 99.86%).
 
-**[Q-learning snake](https://github.com/keonwoo98/Learn2Slither).** Implemented a Q-learning agent restricted to 4-direction local vision relative to the snake's head. Encoded relative directional state rather than explicit coordinates, enabling the trained agent to generalize across unobserved board dimensions. Also implemented linear and logistic regression models from scratch.
+**[Q-learning snake](https://github.com/keonwoo98/Learn2Slither).** Implemented tabular Q-learning with an epsilon-greedy policy for an agent that only sees 4-direction vision from the snake's head. Danger, apples, and body per direction are encoded as relative features in a single integer state, so the same model plays on board sizes it was never trained on. Also implemented linear regression with gradient descent and One-vs-All logistic regression trained with SGD, batch, and mini-batch gradient descent (98.32% accuracy), all without ML libraries.
 
-### Systems, security, blockchain
+### Systems, Security, Blockchain
 
 **[x86 kernel from scratch](https://github.com/keonwoo98/KFS-3) (C, NASM).** Built an x86 kernel featuring higher-half paging via recursive page directories, a Multiboot memory map frame allocator, and kmalloc/vmalloc heap management without standard libraries. Dual-mapped identity and higher-half memory in the bootstrap directory to maintain compatibility when enabling paging in low memory. Lacking a debugger or stdout, constructed regression test suites by dumping VGA memory via the QEMU monitor.
 
 **[Rust Gomoku engine](https://github.com/keonwoo98/Gomoku).** Developed a Negamax search engine with null-move pruning, transposition tables, and Lazy SMP, achieving search depths of 10–17 under 500ms per move. Isolated and resolved a search depth collapse issue (where depth dropped to 4) by capturing problematic game log states as regression test cases.
 
-**Solidity Contracts.** Authored a custom BEP-20 token contract without OpenZeppelin, placing minting and ownership transfers behind a 2-of-3 multisig authorization mechanism with safeguard validation checks against unexecutable signer removals. Built a fully on-chain NFT contract that generates SVG graphics and metadata dynamically within the contract; resolved "stack too deep" compilation errors by splitting generation logic into 3 functions and compiling through Yul pipelines.
+**Solidity Contracts.** Authored a custom BEP-20 token contract without OpenZeppelin, placing minting and ownership transfers behind a 2-of-3 multisig authorization mechanism with safeguard validation checks against unexecutable signer removals. Built a fully on-chain NFT contract that generates SVG graphics and metadata dynamically within the contract; resolved "stack too deep" compilation errors by splitting SVG generation into 3 functions and compiling through the Yul IR pipeline (viaIR).
 
-**Additional Systems Work.** Built a multiplayer Tetris platform where the server broadcasts random seeds to synchronize identical piece sequences across clients (94.58% test coverage, 100% engine coverage); engineered VM infrastructure via Vagrant, K3s clusters, and ArgoCD GitOps pipelines; performed OWASP Top 10 web vulnerability exploitation and defense documentation; developed 8 Flutter applications.
+**Additional Systems Work.** Built a server-authoritative multiplayer Tetris (React, Redux, Node, socket.io) where every client derives the same piece sequence from one broadcast seed (94.58% test coverage, 100% on the game engine); engineered VM infrastructure via Vagrant, K3s clusters, and ArgoCD GitOps pipelines; exploited and documented 14 web vulnerabilities mapped to the OWASP Top 10 (UNION-based SQL injection, stored XSS, path traversal, MD5 cookie tampering) with prevention measures; developed 8 Flutter applications.
 
 ## École 42 Seoul
 **Mar 2021 – May 2023 · Seoul**
 
 **[Grand Prize, 42 Hackathon](https://github.com/keonwoo98/42_Eduthon) (Minister of Science and ICT Award).** Led a 3-person team to create a C-based educational project centered on BMP image manipulation—delivering project specifications, a reference implementation, and an autograder. Presented the package across 42 Amsterdam, Brussels, and Paris campuses.
 
-**[A small nginx in C++98](https://github.com/keonwoo98/webserv).** Built an HTTP/1.1 web server parsing Nginx-style configurations into virtual hosts and locations, processing static files, uploads, and CGI asynchronously on a single non-blocking kqueue event loop. Designed configuration parsing with load-time syntax validation, automatic server-to-location setting inheritance, and state-machine request parsing capable of resuming incomplete HTTP header buffers.
+**[A small nginx in C++98](https://github.com/keonwoo98/webserv).** In a 3-person team, I owned the configuration parser and the core server logic of an HTTP/1.1 web server that parses Nginx-style configurations into virtual hosts and locations and processes static files, uploads, and CGI asynchronously on a single non-blocking kqueue event loop. Designed configuration parsing with load-time syntax validation, automatic server-to-location setting inheritance, and state-machine request parsing capable of resuming incomplete HTTP header buffers.
 
-**Multiplayer Pong on the web (NestJS + React).** Developed a real-time Pong platform featuring 42 OAuth, 2FA, Socket.io chat (channels, DMs, blocking), and leaderboards. Architected unidirectional data flows between socket events and UI state.
+**Multiplayer Pong on the web (NestJS + React).** A real-time Pong platform used by 42 students, featuring 42 OAuth, 2FA, Socket.io chat (channels, DMs, blocking), leaderboards, and achievements. I worked across the game, chat, and friends features, and built the chat and friend domains on my own. Architected unidirectional data flows between socket events and UI state.
 
 **Additional Projects.** Re-implemented Libc functions, built a Bash-subset shell, solved Dining Philosophers concurrency problems, built a C raycasting FPS engine, implemented C++98 STL containers, and configured hardened Debian VMs with Docker stacks.
 
@@ -139,11 +141,10 @@ Specialized in Data and Database Architecture. Completed 28 peer-reviewed comput
 
 ## Skills
 
+- **Open source:** CUBRID (2021): Profiled Double Write Buffer bottlenecks in the storage engine, contributed upstream optimization patches, and presented findings to the core engineering team.
 - **Proficient:** TypeScript, Python, C / C++, SQL (PostgreSQL)
 - **Experienced with:** Rust, Deno, Solidity, Dart / Flutter, x86 assembly
 - **AI systems:** RAG (hybrid retrieval, RRF, reranking), agentic tool loops, CRAG, evals (LLM-as-judge), LLM cost and latency engineering, output sandboxing, LoRA fine-tuning, local serving (Ollama), speech pipelines (VAD, STT, TTS)
 - **Backend & Web:** Next.js, FastAPI, Flask, SvelteKit, Node / Deno, Supabase/Postgres (RLS, PL/pgSQL), Redis, SSE / WebSocket
 - **Infrastructure:** GCP Cloud Run, Vercel, Docker, K3s + ArgoCD, GitHub Actions, Sentry, OpenTelemetry, PostHog
 - **Languages:** Korean (native) · English (professional) · French (basic)
-- **Open source:** CUBRID (2021): Profiled Double Write Buffer bottlenecks in the storage engine, contributed upstream optimization patches, and presented findings to the core engineering team.
-

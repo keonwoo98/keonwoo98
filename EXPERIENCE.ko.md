@@ -20,7 +20,7 @@ English: [EXPERIENCE.md](EXPERIENCE.md) · [LinkedIn](https://www.linkedin.com/i
 
 **수정안 페이지.** 법안 하나에 수정안이 수백 건씩 발의되며, 로비 회사는 그중 고객사와 관련된 항목을 신속히 선별해 의견을 제출해야 한다. 법안(dossier)별 수정안 목록, 검색, 필터 기능을 구현하고, 사용자가 페이지 진입 시 서버가 AI 백엔드로 법안 데이터를 넘겨 수정안별 AI 리포트를 비동기로 미리 생성·캐싱하도록 했다. 사용자가 직접 수정한 리포트가 있을 경우 이를 최우선 반환하고, export 시에는 DB에 축적된 리포트를 읽어 Word 파일로 내보내되 아직 생성 중인 요청은 완료될 때까지 대기 처리했다. 수정안 polling 인프라는 GitHub Actions cron에서 GCP Scheduler로 옮겼으며, 계속 커지던 리포트 생성 엔드포인트를 모듈화해 리팩터링했다. 또한 로비스트의 실제 문서 검토 방식에 맞춰 전체 뷰를 엑셀 형태의 Grid/Table UI로 재설계하여 적용했다. 이 과정에서 Videos, Biographies, Amendments, Documents, Agenda 등 흩어져 있던 검색 및 필터 UI 체계도 하나로 통합했다.
 
-**라이브 의회 워크스페이스.** 하원, 상원, EU 의회가 같은 날 동시 다발적으로 생중계를 진행하여 통합 모니터링 화면이 필요했다. 라이브 영상, AI 기반 자동 챕터 분할, Deepgram 실시간 transcript, 챗 및 메모장을 단일 뷰로 통합한 워크스페이스를 개발했다. 실시간 화자 인식을 통해 발언 중인 정치인 프로필을 즉시 매칭하고, 발언 문장 하이라이트, 자동 스크롤, 문장 클릭 시 영상 타임스탬프 이동이 상호 연동되도록 구현했다. Tiptap 기반 메모장과 transcript 연동, 답변 export 기능도 구축했다. 라이브 HLS 스트리밍 특성상 세그먼트 누락이나 지연이 자주 발생했다. 단순 재시도 처리 방식은 경고가 누적되다가 fatal error 발생 시 플레이어 전체가 crash되는 문제가 있었다. 이를 개선하기 위해 hls.js 권장 가이드를 기반으로 복구 로직을 재설계했다. 에러 유형별로 구분하여 level, fragment, key 로딩 실패는 startLoad로 재접속하고 3회 연속 실패 시 recoverMediaError로 승격시켰으며, 30초간 에러가 없으면 연속 에러 카운터를 초기화하여 루프 로딩을 방지했다. 404 누락 세그먼트는 5회 재시도 후 한도를 초과하면 요청을 abort하고 플레이어를 안전하게 정리하도록 처리했다. 버퍼, 타임아웃, 재시도 예산 역시 VOD 기준이 아닌 라이브 스트리밍 환경에 맞게 재설정했다.
+**라이브 의회 워크스페이스.** 하원, 상원, EU 의회가 같은 날 동시 다발적으로 생중계를 진행하여 통합 모니터링 화면이 필요했다. 라이브 영상, AI 기반 자동 챕터 분할, Deepgram 실시간 transcript, 챗 및 메모장을 단일 뷰로 통합한 워크스페이스를 개발했다. 실시간 화자 인식을 통해 발언 중인 정치인 프로필을 즉시 매칭하고, 발언 문장 하이라이트, 자동 스크롤, 문장 클릭 시 영상 타임스탬프 이동이 상호 연동되도록 구현했다. 챗 답변을 Tiptap 메모장으로 옮기고 transcript를 export하는 기능도 구축했다. 라이브 HLS 스트리밍 특성상 세그먼트 누락이나 지연이 자주 발생했다. 단순 재시도 처리 방식은 경고가 누적되다가 fatal error 발생 시 플레이어 전체가 crash되는 문제가 있었다. 이를 개선하기 위해 hls.js 권장 가이드를 기반으로 복구 로직을 재설계했다. 에러 유형별로 구분하여 level, fragment, key 로딩 실패는 startLoad로 재접속하고 세 번째 시도마다 recoverMediaError로 승격시켰으며, 30초간 에러가 없으면 연속 에러 카운터를 초기화하여 루프 로딩을 방지했다. 재시도해도 소용없는 404 누락 세그먼트는 5회에서 끊고 녹화가 불완전하다고 사용자에게 알린 뒤, 진행 중인 요청을 abort하고 플레이어를 안전하게 정리했다. 버퍼, 타임아웃, 재시도 예산 역시 VOD 기준이 아닌 라이브 스트리밍 환경에 맞게 재설정했다.
 
 **고객사별 맞춤 라이브 챗 context.** 실시간 회의 진행 중 질의에는 생중계 방금 일어난 내용뿐만 아니라, 질의한 고객사의 사업 배경과 관심사를 기준으로 답변해야 한다. transcript, 현재 화자, 논의 중인 수정안 등 실시간 라이브 상태값에 고객사별 기본 정보 및 memory(관심사)를 결합하는 context 주입 pipeline을 조사·설계 및 구현하여 팀 내 표준으로 전파했다.
 
@@ -28,15 +28,15 @@ English: [EXPERIENCE.md](EXPERIENCE.md) · [LinkedIn](https://www.linkedin.com/i
 
 **앱 전역 검색.** 사용자가 정치인, 문서, 수정안 중 어떤 카테고리를 찾는지 지정하지 않아도 바로 검색할 수 있는 단일 검색 인터페이스를 구축했다. 맥의 Spotlight UX를 벤치마킹하여 검색창 하나로 모든 리소스를 통합하고, 키워드 검색과 임베딩 검색을 병행 처리해 정확한 키워드가 일치하지 않더라도 의미론적으로 관련 정치인, 문서, 수정안, 영상, 일정을 한 번에 탐색할 수 있게 했다.
 
-**AI 답변 속도.** 문서 질의 요청 시마다 백엔드가 전체 프로세스를 처음부터 재처리하여 응답에 10~15초가 소요되었다. 중복 데이터를 호출하는 병목을 제거하고, 독립적인 단계는 병렬(Async Concurrency)로 전환했으며, 모델에 투입되는 토큰 예산 구조를 재조정했다. 여기에 답변 streaming 서빙과 캐시 레이어를 도입하여 end-to-end 응답 latency를 2초 안쪽으로 단축했다.
+**AI 답변 속도 (10~15초 → 2초 미만).** 문서 질의 요청 시마다 백엔드가 전체 프로세스를 처음부터 재처리하여 응답에 10~15초가 소요되었다. 중복 데이터를 호출하는 병목을 제거하고, 독립적인 단계는 병렬(Async Concurrency)로 전환했으며, 모델에 투입되는 토큰 예산 구조를 재조정했다. 여기에 답변 streaming 서빙과 캐시 레이어를 도입하여 end-to-end 응답 latency를 2초 안쪽으로 단축했다.
 
 **AI 백엔드와 스택 마이그레이션.** 빈 저장소 상태에서 공통 AI 백엔드를 구축했으며, 이후 출시된 모든 AI 기능이 해당 인프라 위에서 구동되도록 기반을 만들었다. 최초 버전부터 요청별 token 비용 추적 모듈을 내장했다. 생성 요청 대기의 주요 원인이었던 동기(Synchronous) I/O 병목을 Non-blocking Async 구조로 전면 재작성하여 동시 요청 처리 성능을 개선했다. 100페이지 분량 문서의 구조화 작업은 실시간 진행률을 시각화하는 streaming 방식으로 전환했다. 기술 스택은 서비스 요구사항 변화에 맞춰 유연하게 이관했다. 프론트엔드와 타입 불일치가 발생하던 Python FastAPI를 Deno로 이관했고, 10여 개 저장소로 파편화되어 동일 함수가 중복 존재하던 microservice 구조를 Turborepo 기반 모노레포로 통합했다. 이후 최신 AI 및 Vector DB 라이브러리의 Deno 런타임 미지원 제약으로 인해 Node.js 환경으로 재이관했다. 이관 시에는 두 버전을 나란히 띄우는 Dual-run 인프라를 구성하고 엔드포인트 단위로 트래픽을 단계적 전환하여 무중단 이관을 달성했다. Svelte 5 릴리즈 시에도 안정화 즉시 프로덕션 업그레이드를 완료했다.
 
 **Observability.** 고객의 장애 제보에 의존하던 수동적인 문제를 해결하기 위해 백엔드 전반의 에러 핸들링 구조를 체계화했다. 공용 logger를 구현하여 호출부 코드 수정 없이 4개 서비스 로그를 Sentry로 통합 집계했으며, 주요 에러 발생 시 Discord 알림 체계를 구축했다. OpenTelemetry를 도입해 프론트엔드부터 API, DB, 모델 호출 구간별 latency를 프로파일링하고, PostHog로 사용자 사용 패턴을 분석했다. 상원 생중계 중 발생한 transcript 지연 문제를 chunking 병목으로 원인 규명하여 당일 즉시 수정했다. Deno Deploy 런타임의 커스텀 플래그 미지원으로 인한 OTel 계측 제약을 확인한 후, Sentry 모니터링 범위를 확장하고 신규 워크로드를 GCP로 이관했으며, 이 판단을 기반으로 Node.js 마이그레이션 기술 의사결정을 주도했다.
 
-**새 도구 도입과 판단.** LangChain, LangGraph, LangSmith를 챗 및 리포트 agent에 도입하여 운영을 전담했다. 신규 LLM 모델 및 API 기능은 벤치마크 점수에 의존하지 않고 내부 서비스 데이터 검증 파이프라인을 거쳐 릴리즈 며칠 내에 프로덕션에 신속 적용했다. 당시 OpenAI API의 검색 출처 미표기 한계를 보완하기 위해 Tavily 검색 API를 파이프라인에 직접 연동했다.
+**새 도구 도입과 판단.** LangChain, LangGraph, LangSmith를 챗 및 리포트 agent에 도입하여 운영을 전담했다. 신규 LLM 모델 및 API 기능은 벤치마크 점수에 의존하지 않고 우리 서비스 출력으로 검증한 뒤 릴리즈 며칠 내에 프로덕션에 적용했다. 당시 OpenAI API의 검색 출처 미표기 한계를 보완하기 위해 Tavily 검색 API를 파이프라인에 직접 연동했다.
 
-**팀 공통 개발 기준.** 단일 장애 발생 시 표준 에러 응답을 보장하는 구조(RFC 7807), 팀 observability 가이드, AI 코딩 도구용 규칙(rules) 파일 체계를 수립하고 전파했다. 공용 패키지 리팩터링 시 모듈 owner별 TODO 분할 방식을 도입해 소규모 PR 단위로 병렬 마이그레이션을 진행했으며, 팀 PR 전반에 대한 코드 리뷰를 전담했다.
+**팀 공통 개발 기준.** 표준 에러 응답 규격(RFC 7807), 팀 observability 가이드, AI 코딩 도구용 규칙(rules) 파일을 수립하고 전파했다. 공용 패키지 리팩터링 시 모듈 owner별 TODO 분할 방식을 도입해 소규모 PR 단위로 병렬 마이그레이션을 진행했으며, 팀 PR 대부분의 코드 리뷰를 맡았다.
 
 그 외에도 일정(Agenda), 법안 및 수정안 문서(Textes), 맞춤 알림, 사용자 설정 페이지 등 핵심 도메인을 최초 구축했다.
 
@@ -47,7 +47,7 @@ English: [EXPERIENCE.md](EXPERIENCE.md) · [LinkedIn](https://www.linkedin.com/i
 ## Belage | Freelance Full-Stack Engineer
 **2025.10 ~ 2026.09 · 파리**
 
-여러 브랜드를 운영하는 사진 스튜디오의 기존 수동 업무 프로세스(구글 폼 예약, 수작업 정산, 수동 메신저 상담)를 전면 자동화하기 위해 웹사이트부터 백오피스 관리 시스템까지 전 파이프라인을 구축 및 운영했다.
+웹사이트 없이 구글 폼으로 받은 예약을 사람이 옮겨 적고, 메신저 상담과 결제·인보이스도 모두 수작업으로 처리하던 여러 브랜드의 사진 스튜디오. 고객 사이트부터 백오피스 관리 시스템까지 전체 기술 스택을 혼자 구축·운영하며 이 업무를 자동화했다.
 
 `Next.js` `TypeScript` `Supabase/Postgres (RLS, PL/pgSQL, pg_cron)` `SumUp (online + card-present)` `Google Calendar API` `Vercel` `pgTAP`
 
@@ -74,13 +74,13 @@ English: [EXPERIENCE.md](EXPERIENCE.md) · [LinkedIn](https://www.linkedin.com/i
 
 `Next.js 16 / React 19` `TypeScript` `Supabase + pgvector` `OpenAI Responses API` `Cohere rerank` `Upstash Redis` `Polar.sh` `PostHog` `Vercel`
 
-**Personalised retrieval.** 질문이 동일하더라도 사용자 프로필(국적, 지역, 체류 자격, 가족 관계, 직업)에 따라 적용 법률이 달라진다. 프로필 데이터를 Tag 및 RRF Boost 조건으로 결합해 Retrieval 범위와 적용 법 체계를 동적으로 선정한다. 사용자가 외국인 체류 포털 데이터를 연동하면, 역공학(Reverse-Engineering)으로 매핑한 110개 이상의 endpoint 표준 규격으로 파싱하여 답변 생성에 반영한다.
+**Personalised retrieval.** 질문이 동일하더라도 사용자 프로필(국적, 지역, 체류 자격, 가족 관계, 직업)에 따라 적용 법률이 달라진다. 프로필 데이터를 Tag 및 RRF Boost 조건으로 결합해 Retrieval 범위와 적용 법 체계를 동적으로 선정한다. 사용자가 외국인 체류 포털(ANEF) 데이터를 연동하면, 역공학(Reverse-Engineering)으로 파악한 포털 endpoint 13개 기준으로 파싱하여 답변 생성에 반영한다.
 
-**공식 소스만 근거로.** Légifrance 6개 법전 데이터는 일간, 정부 소스 15개는 주간 단위로 수집·갱신한다. 웹 검색은 검증된 55개 Whitelisted 도메인 내부로 제한하며, 법정 수치는 버전 관리 DB를 구축해 Ground Truth 데이터로 활용한다.
+**공식 소스만 근거로.** Légifrance 6개 법전은 매일 동기화하고, Service-Public, étudiant.gouv, France Travail, Welcome to France 같은 공식 소스는 신선도 기준으로 매주 다시 수집한다. 법률 사전 검색(pre-search)은 공식 도메인 55개, 웹 검색은 허용 도메인 66개 안으로 제한하며, 법정 수치는 버전 관리되는 facts 테이블에 두고 Ground Truth로 활용한다.
 
-**근거가 약할 때를 아는 retrieval.** Retrieval Gate → Semantic Cache → Full-text / Dual-embedding(pgvector) Weighted RRF → Cohere Rerank → Quality Gate 단계별 검증 파이프라인을 거친다. 근거 부족 판단 시 Quality Gate가 1차 검색 결과를 기각하고, Agent가 Tool을 통해 공식 소스를 재탐색한다. Agent Tool-calling은 최대 3라운드로 제한되며, 생성된 답변 초안은 병렬 Verifier 3종(CRAG, Legal Reference Existence, Citation Entailment)이 검증한다. LLM 생성 SQL은 공개 Fact 테이블 4개만 접근 가능한 Anonymous Role로 샌드박싱하여 실행한다.
+**근거가 약할 때를 아는 retrieval.** Retrieval Gate → Semantic Cache → Full-text / Dual-embedding(pgvector) Weighted RRF → Cohere Rerank → Quality Gate 단계별 검증 파이프라인을 거친다. 근거 부족 판단 시 Quality Gate가 1차 검색 결과를 기각하고, Agent가 Tool을 통해 공식 소스를 재탐색한다. Agent는 도구 10개(함수 9개와 web search)로 최대 3라운드 tool-calling을 수행하며, 생성된 답변 초안은 병렬 Verifier 3종(CRAG, Legal Reference Existence, Citation Entailment)이 검증한다. LLM 생성 SQL은 공개 Fact 테이블 4개만 읽을 수 있는 Anonymous Role로 읽기 전용 RPC를 통해 실행한다.
 
-**비용과 latency를 재고 나서 줄이기.** Stage별 Cost Telemetry 구축 및 분석 결과, Verification 과정이 전체 비용의 80%, Web Pre-search가 전체 Latency의 49%를 점유함을 확인했다. Pre-search 실행 조건을 캐시 만료 시점으로 제어하여 검색 Latency를 18초에서 0.9초로 단축했으며, Follow-up 질의 시 Retrieval Gate를 통해 60~70%의 검색 과정을 우회 처리(Skip)하도록 최적화했다.
+**비용과 latency를 재고 나서 줄이기.** 단계별 사용량 계측에서 web pre-search가 법률 답변 한 건 비용 $0.097의 49%를 차지하고, RAG보다 오래 걸릴 때는 첫 토큰까지 시간(TTFT)을 10~15초 늘린다는 것을 확인했다. 메인 agent 루프가 법률 질의에서 이미 web search를 강제하고 있어 같은 검색을 두 번 하는 셈이었기에, 상위 청크가 14일보다 오래됐거나 검색 결과가 없을 때만 pre-search를 실행하도록 바꾸고 이전 동작은 상수 하나로 되돌릴 수 있게 남겼다. 그 전에는 검색 인덱스를 메모리에 맞는 경량 인덱스로 바꾸고 프랑스어 전용 인덱스를 추가해 DB 검색을 약 18초에서 0.9초로 줄였고, 순차 7단계 파이프라인을 병렬 3단계로 묶어 전체 응답을 약 69초에서 55초로 단축했다. 법률 질의를 gpt-5.4로 자동 승격하지 않고 작은 메인 모델로 처리해 비용을 약 60~70% 줄였으며(추정), Retrieval Gate는 후속 질문, 확인 질문, 인사에서 새 검색을 건너뛴다.
 
 **법이 바뀌어도 따라가는 eval.** 100건 이상의 Eval Set과 LLM-as-judge 지표 6종을 수립하고, Deterministic Metrics를 병행하여 검증 정합성을 확보했다. 법령 수치 테스트 케이스는 실행 시점에 버전 관리되는 Facts 테이블에서 정답을 참조하도록 설계하여 법령 개정 시에도 테스트 코드를 수정할 필요가 없는 구조를 만들었다. 매주 CI에서 자동 실행되며 회귀 발생 시 빌드가 실패하도록 처리했다.
 
@@ -95,9 +95,9 @@ English: [EXPERIENCE.md](EXPERIENCE.md) · [LinkedIn](https://www.linkedin.com/i
 
 **중단 없는 라이브 pipeline.** 현장 네트워크의 빈번한 끊김 환경 대응을 위해 전 과정에 결함 허용(Fault-tolerant) Fallback 아키텍처를 설계했다. Silero VAD로 발화를 세그먼트화하고, Cloud STT 장애 시 Local Whisper로 자동 이관하며, 번역 레이어는 Weekly Cache → Local LoRA → Cloud 3단 구조로 전환된다. 8초 Latency 제한 준수를 위한 Request Hedging, Cloud STT Circuit Breaker, 완벽 오프라인 처리 경로를 구현했다.
 
-**직접 만든 corpus로 Qwen2.5-7B LoRA fine-tuning.** 3년 치 한-불 설교 아카이브를 정규화하고 문장 단위로 정렬해 약 8K 쌍의 parallel 데이터셋을 구축했으며, Qwen2.5-7B LoRA 학습 후 Ollama로 로컬 서빙한다. 라이브 세션마다 도메인 맥락 데이터가 축적되는 Distillation Flywheel을 구축하고, Train/Eval 데이터 누수를 엄격히 격리했다.
+**직접 만든 corpus로 Qwen2.5-7B LoRA fine-tuning.** 3년 치(2023~2025) 한-불 설교 번역 아카이브를 정규화하고 문장 단위로 정렬해 약 8K 쌍의 parallel 데이터셋을 구축했으며, Qwen2.5-7B LoRA 학습 후 Ollama로 로컬 서빙한다. 라이브 세션마다 도메인 맥락 데이터가 축적되는 Distillation Flywheel을 구축하고, Train/Eval 데이터 누수를 엄격히 격리했다.
 
-**실측으로 정한 guard.** STT 모델의 무음 구간 환각(Hallucination) 발화 생성을 방지하기 위해 실제 라이브 음성 데이터에서 실측한 Logprob 분포 기반 필터링을 적용했다(발화 > -0.12, 환각 < -1.3). 사전 구축된 번역 캐시는 23회 라이브 데이터 기준 전체 발화의 약 18%를 흡수/절감했다(세션별 3%~52%).
+**실측으로 정한 guard.** STT 모델의 무음 구간 환각(Hallucination) 발화 생성을 방지하기 위해 실제 라이브 음성 데이터에서 실측한 Logprob 분포 기반 필터링을 적용했다(발화 > -0.12, 환각 < -1.3). 사전 구축된 번역 캐시는 23회 라이브 데이터 기준 전체 발화의 약 18%를 흡수/절감했다(세션별 3%~52%, 설교자가 원고를 따르는 정도에 따라 차이).
 
 ---
 
@@ -114,7 +114,7 @@ Data and database architecture 전공. 교수나 강의 없이 동료 평가(Pee
 
 **[CNN 잎 병해 분류기](https://github.com/keonwoo98/Leaffliction) (PyTorch).** Conv Block 4개 기반의 Custom CNN을 설계했다. 첫 학습의 Validation 정확도 100% 원인을 조사하여 데이터 증강 후 분할로 인해 동일 이미지 변형이 Train/Val 양쪽에 유출된 누수 현상을 규명했다. 분할 후 학습 중에만 증강이 적용되도록 수정하여 Held-out 99.79% 정확도를 확보했으며, 이는 Fine-tuned EfficientNet-B0(99.86%)와 동등한 수준이다.
 
-**[Q-learning snake](https://github.com/keonwoo98/Learn2Slither).** 뱀 머리 기준 4방향 시야 제약 조건하에서 맵 크기에 독립적인 상태 인코딩을 설계하여, 학습에 사용되지 않은 미지의 보드 크기에서도 동일하게 동작하는 에이전트를 구현했다. 그 외 Linear/Logistic Regression 알고리즘을 외부 라이브러리 없이 직접 작성했다.
+**[Q-learning snake](https://github.com/keonwoo98/Learn2Slither).** 뱀 머리 기준 4방향 시야만 받는 에이전트를 epsilon-greedy 정책의 tabular Q-learning으로 구현했다. 방향별 위험, 사과, 몸통 여부를 상대 특징으로 묶어 정수 state 하나로 인코딩해, 학습하지 않은 보드 크기에서도 같은 모델이 동작한다. 그 외 gradient descent로 linear regression을, SGD·batch·mini-batch gradient descent로 One-vs-All logistic regression(정확도 98.32%)을 ML 라이브러리 없이 구현했다.
 
 ### Systems, Security, Blockchain
 
@@ -122,18 +122,18 @@ Data and database architecture 전공. 교수나 강의 없이 동료 평가(Pee
 
 **[Rust 오목 엔진](https://github.com/keonwoo98/Gomoku).** Negamax 알고리즘에 Null-move Pruning, Transposition Table, Lazy SMP를 적용하여 한 수당 500ms 이내에 Depth 10~17을 탐색하는 엔진을 개발했다. 탐색 깊이가 Depth 4로 저하되는 국면을 발견하고 회귀 테스트 케이스로 고정하여 원인 분석 및 최적화를 완료했다.
 
-**Solidity 컨트랙트 2개.** OpenZeppelin 없이 BEP-20 토큰 규격을 직접 구현하고, Mint 및 소유권 이전을 2-of-3 Multisig 검증 후 실행하도록 설계했다. 서명자 제거 시 남아있는 인원이 최소 필요 승인 수에 미달하여 컨트랙트가 데드락되는 문제를 방지하기 위해 사전 검증 로직을 구축했다. 두 번째 NFT 프로젝트에서는 SVG 이미지 및 메타데이터를 온체인에서 전량 생성하도록 구현했으며, 문자열 결합 시 발생하는 Stack Too Deep 에러를 방지하고자 생성 함수 분할 및 Yul 파이프라인 컴파일을 적용했다.
+**Solidity 컨트랙트 2개.** OpenZeppelin 없이 BEP-20 토큰 규격을 직접 구현하고, Mint 및 소유권 이전을 2-of-3 Multisig 검증 후 실행하도록 설계했다. 서명자 제거 시 남아있는 인원이 최소 필요 승인 수에 미달하여 컨트랙트가 데드락되는 문제를 방지하기 위해 사전 검증 로직을 구축했다. 두 번째 NFT 프로젝트에서는 SVG 이미지 및 메타데이터를 온체인에서 전량 생성하도록 구현했으며, 긴 문자열 결합에서 발생하는 Stack Too Deep 에러를 SVG 생성 함수 3개로 분할하고 viaIR(Yul IR) 파이프라인으로 컴파일해 해결했다.
 
-**그 외.** Seed 기반 동기화를 통해 동일 피스 순서를 재현하는 멀티플레이어 테트리스(테스트 커버리지 94.58%), Vagrant 및 K3s 기반 클러스터 구축과 ArgoCD GitOps 동기화 인프라 과제, OWASP Top 10 기반 취약점 모의 침투 및 방어 문서화 프로젝트, Flutter 앱 8종을 수행했다.
+**그 외.** 서버가 게임 상태를 관리하고 하나의 seed로 모든 클라이언트가 같은 피스 순서를 받는 멀티플레이어 테트리스(React, Redux, Node, socket.io, 테스트 커버리지 94.58%, 게임 엔진 100%), Vagrant 및 K3s 기반 클러스터 구축과 ArgoCD GitOps 동기화 인프라 과제, OWASP Top 10에 대응하는 웹 취약점 14종(UNION 기반 SQL injection, stored XSS, path traversal, MD5 쿠키 변조 등) 공격 및 방어 문서화, Flutter 앱 8종을 수행했다.
 
 ## École 42 Seoul
 **2021.03 ~ 2023.05 · 서울**
 
 **[42 해커톤 대상](https://github.com/keonwoo98/42_Eduthon) (과학기술정보통신부 장관상).** 3인 팀 리드. C 언어 기반 BMP 이미지 처리 교육용 과제, Reference Implementation, Autograder 패키지를 설계하고 42 Amsterdam, Brussels, Paris 캠퍼스에서 발표를 진행했다.
 
-**[C++98로 만든 미니 nginx](https://github.com/keonwoo98/webserv).** Nginx 문법의 설정 파일을 파싱하여 가상 호스트 및 location을 구성하고 kqueue Non-blocking Event Loop 기반으로 Static File, 업로드, CGI를 비동기 처리하는 HTTP/1.1 서버를 구축했다. 로딩 시점 사전 문법 검증으로 잘못된 설정을 서버 기동 전 차단했으며, Server 단 설정을 Location 단으로 자동 상속하여 상위 모듈과의 의존성을 분리했다. 네트워크 분할로 인해 HTTP 헤더 수신이 중단되더라도 파싱 상태를 보존하고 다음 이벤트에서 이어서 처리하는 상태 머신을 설계했다.
+**[C++98로 만든 미니 nginx](https://github.com/keonwoo98/webserv).** 3인 팀에서 설정 파서와 서버 메인 로직을 맡았다. Nginx 문법의 설정 파일을 파싱하여 가상 호스트 및 location을 구성하고 kqueue Non-blocking Event Loop 기반으로 Static File, 업로드, CGI를 비동기 처리하는 HTTP/1.1 서버를 구축했다. 로딩 시점 사전 문법 검증으로 잘못된 설정을 서버 기동 전 차단했으며, Server 단 설정을 Location 단으로 자동 상속하여 상위 모듈과의 의존성을 분리했다. 네트워크 분할로 인해 HTTP 헤더 수신이 중단되더라도 파싱 상태를 보존하고 다음 이벤트에서 이어서 처리하는 상태 머신을 설계했다.
 
-**멀티플레이어 Pong 웹 게임 (NestJS + React).** 42 OAuth, 2FA, Socket.io 실시간 채팅(채널, DM, 차단), 랭킹 및 업적 시스템을 갖춘 실시간 대전 아키텍처를 개발했다. 소켓 이벤트 발생과 UI 상태 변화 간 단방향 데이터 흐름(Unidirectional Data Flow)을 설계해 실시간 동기화 정합성을 유지했다.
+**멀티플레이어 Pong 웹 게임 (NestJS + React).** 42 학생들이 실제로 사용한 서비스로, 42 OAuth, 2FA, Socket.io 실시간 채팅(채널, DM, 차단), 랭킹 및 업적 시스템을 갖춘 실시간 대전 플랫폼이다. 게임, 채팅, 친구 기능 전반에 참여했고 채팅과 친구 도메인은 혼자 개발했다. 소켓 이벤트 발생과 UI 상태 변화 간 단방향 데이터 흐름(Unidirectional Data Flow)을 설계해 실시간 동기화 정합성을 유지했다.
 
 **그 외.** Libc 함수 재구현, Bash Subset Shell, Dining Philosophers 동시성 과제, Raycasting 기반 FPS 엔진(C), C++98 STL Container 직접 구현, Hardened Debian VM 및 Docker 기반 인프라 과제를 완성했다.
 
@@ -148,4 +148,3 @@ Data and database architecture 전공. 교수나 강의 없이 동료 평가(Pee
 - **Backend & Web**: Next.js, FastAPI, Flask, SvelteKit, Node/Deno, Supabase/Postgres (RLS, PL/pgSQL), Redis, SSE/WebSocket
 - **Infrastructure**: GCP Cloud Run, Vercel, Docker, K3s + ArgoCD, GitHub Actions, Sentry, OpenTelemetry, PostHog
 - **언어·병역**: 한국어(모국어) · 영어(업무) · 프랑스어(기초) · 군필(육군 헌병, 2019.01 ~ 2020.08)
-
