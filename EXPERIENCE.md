@@ -38,7 +38,7 @@ The French National Assembly, the Senate, and the EU Parliament stream hundreds 
 
 I also built the agenda workspace, bills and text documents pages, custom alerts engine, and user settings pages from scratch.
 
-> Offered a full-time position following a 6-month internship. CEO Recommendation (Dec 2024): "top 1%" in conscientiousness; "his issues, PR comments and technical notes are the most organized and consistent"; "I would bet on him."
+> Offered to stay on after the six-month internship. CEO Recommendation (Dec 2024): "top 1%" in conscientiousness; "his issues, PR comments and technical notes are the most organized and consistent"; "I would bet on him."
 
 ---
 

@@ -16,7 +16,7 @@ English: [EXPERIENCE.md](EXPERIENCE.md) · [LinkedIn](https://www.linkedin.com/i
 
 **정치 데이터 수집과 검색 파이프라인.** 의회 포털, 정치인 SNS, 언론사, 위원회 PDF 문서에서 매일 새로운 데이터가 쏟아진다. 소스마다 watermark cron을 두어 델타(변경분) 데이터만 수집하고, doc_id, 정치인 id, 법안 id, 기관, 날짜로 메타데이터를 규격화했다. 긴 문서는 300~500 단어로 잘라 오버랩 저장함으로써 자른 경계에서 문맥이 끊기거나 정보가 누락되지 않게 했다. Postgres에는 높은 데이터 정합성이 요구되는 메타데이터와 표결 내역을 배치하고, Vector DB에는 검색용 임베딩을 저장했다. 검색 시 벡터 유사도 검색과 키워드 검색(BM25)을 동시에 실행해 Rank Fusion(RRF)으로 결합하고, 기관과 연도로 구분한 namespace 및 메타데이터 필터로 검색 범위를 먼저 선별했다. 초기에는 Pinecone을 활용했으나, 수정안 챗의 retrieval 인프라는 Turbopuffer로 이관했다. Turbopuffer 저장소 제약에 맞춰 French BM25 tokenizer를 설정하고, filter용 attribute에서 4KB 제한이 걸리는 긴 본문을 제외했으며, 개별 문서 실패 시에도 인덱싱 적재가 중단되지 않는 처리 로직을 적용했다.
 
-**고객 맞춤 모니터링.** 고객은 자신들의 사업 영역 및 관심사 영역의 의회 활동만 정확히 추적하길 원했다. 기존 키워드 매칭 방식 방식에서는 "에너지"라는 단어만 포함되어도 원자력 안건이 재생에너지 담당자에게 전달되는 한계가 있었다. 이를 해결하고자 고객 관심 프로필과 의회 활동 데이터를 모두 임베딩하여 의미 기반(Semantic Matching)으로 매칭되도록 전환했고, 이 아키텍처 위에서 맞춤형 리포트 및 주제별 자동 알림 파이프라인을 운영했다.
+**고객 맞춤 모니터링.** 고객은 자신들의 사업 영역 및 관심사 영역의 의회 활동만 정확히 추적하길 원했다. 기존 키워드 매칭 방식에서는 "에너지"라는 단어만 포함되어도 원자력 안건이 재생에너지 담당자에게 전달되는 한계가 있었다. 이를 해결하고자 고객 관심 프로필과 의회 활동 데이터를 모두 임베딩하여 의미 기반(Semantic Matching)으로 매칭되도록 전환했고, 이 아키텍처 위에서 맞춤형 리포트 및 주제별 자동 알림 파이프라인을 운영했다.
 
 **수정안 페이지.** 법안 하나에 수정안이 수백 건씩 발의되며, 로비 회사는 그중 고객사와 관련된 항목을 신속히 선별해 의견을 제출해야 한다. 법안(dossier)별 수정안 목록, 검색, 필터 기능을 구현하고, 사용자가 페이지 진입 시 서버가 AI 백엔드로 법안 데이터를 넘겨 수정안별 AI 리포트를 비동기로 미리 생성·캐싱하도록 했다. 사용자가 직접 수정한 리포트가 있을 경우 이를 최우선 반환하고, export 시에는 DB에 축적된 리포트를 읽어 Word 파일로 내보내되 아직 생성 중인 요청은 완료될 때까지 대기 처리했다. 수정안 polling 인프라는 GitHub Actions cron에서 GCP Scheduler로 옮겼으며, 계속 커지던 리포트 생성 엔드포인트를 모듈화해 리팩터링했다. 또한 로비스트의 실제 문서 검토 방식에 맞춰 전체 뷰를 엑셀 형태의 Grid/Table UI로 재설계하여 적용했다. 이 과정에서 Videos, Biographies, Amendments, Documents, Agenda 등 흩어져 있던 검색 및 필터 UI 체계도 하나로 통합했다.
 
@@ -95,7 +95,7 @@ English: [EXPERIENCE.md](EXPERIENCE.md) · [LinkedIn](https://www.linkedin.com/i
 
 **중단 없는 라이브 pipeline.** 현장 네트워크의 빈번한 끊김 환경 대응을 위해 전 과정에 결함 허용(Fault-tolerant) Fallback 아키텍처를 설계했다. Silero VAD로 발화를 세그먼트화하고, Cloud STT 장애 시 Local Whisper로 자동 이관하며, 번역 레이어는 Weekly Cache → Local LoRA → Cloud 3단 구조로 전환된다. 8초 Latency 제한 준수를 위한 Request Hedging, Cloud STT Circuit Breaker, 완벽 오프라인 처리 경로를 구현했다.
 
-**직접 만든 corpus로 Qwen2.5-7B LoRA fine-tuning.** 3년 치 한-불 설교 아카이브를 정규화하고 문장 단위로 정렬해 약 8K 쌍의 파라파이프라인 데이터셋을 구축했으며, Qwen2.5-7B LoRA 학습 후 Ollama로 로컬 서빙한다. 라이브 세션마다 도메인 맥락 데이터가 축적되는 Distillation Flywheel을 구축하고, Train/Eval 데이터 누수를 엄격히 격리했다.
+**직접 만든 corpus로 Qwen2.5-7B LoRA fine-tuning.** 3년 치 한-불 설교 아카이브를 정규화하고 문장 단위로 정렬해 약 8K 쌍의 parallel 데이터셋을 구축했으며, Qwen2.5-7B LoRA 학습 후 Ollama로 로컬 서빙한다. 라이브 세션마다 도메인 맥락 데이터가 축적되는 Distillation Flywheel을 구축하고, Train/Eval 데이터 누수를 엄격히 격리했다.
 
 **실측으로 정한 guard.** STT 모델의 무음 구간 환각(Hallucination) 발화 생성을 방지하기 위해 실제 라이브 음성 데이터에서 실측한 Logprob 분포 기반 필터링을 적용했다(발화 > -0.12, 환각 < -1.3). 사전 구축된 번역 캐시는 23회 라이브 데이터 기준 전체 발화의 약 18%를 흡수/절감했다(세션별 3%~52%).
 
