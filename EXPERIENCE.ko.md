@@ -89,15 +89,15 @@ English: [EXPERIENCE.md](EXPERIENCE.md) · 이력서 PDF: [Kim_Keonwoo_CV.pdf](K
 ### SonnanAI | AI Software Engineer
 **2026.01 ~ 현재 · 파리**
 
-파리 현지 교회의 매주 수동 진행되던 한-불 동시통역 프로세스를 자동화하여, 통역사 없이 실시간 자막과 음성을 제공하는 라이브 파이프라인을 구축했다.
+파리의 한 현장에서 매주 수동으로 진행되던 한-불 동시통역 프로세스를 자동화하여, 통역사 없이 실시간 자막과 음성을 제공하는 라이브 파이프라인을 구축했다.
 
 `Python` `Flask (SSE)` `Silero VAD` `OpenAI transcribe + local Whisper` `Qwen2.5-7B LoRA` `Ollama` `pytest`
 
-**예배 중에 멈추지 않는 pipeline.** 현장 네트워크의 빈번한 끊김 환경 대응을 위해 전 과정에 결함 허용(Fault-tolerant) Fallback 아키텍처를 설계했다. Silero VAD로 발화를 세그먼트화하고, Cloud STT 장애 시 Local Whisper로 자동 이관하며, 번역 레이어는 Weekly Cache → Local LoRA → Cloud 3단 구조로 전환된다. 8초 Latency 제한 준수를 위한 Request Hedging, Cloud STT Circuit Breaker, 완벽 오프라인 처리 경로를 구현했다.
+**중단 없는 라이브 pipeline.** 현장 네트워크의 빈번한 끊김 환경 대응을 위해 전 과정에 결함 허용(Fault-tolerant) Fallback 아키텍처를 설계했다. Silero VAD로 발화를 세그먼트화하고, Cloud STT 장애 시 Local Whisper로 자동 이관하며, 번역 레이어는 Weekly Cache → Local LoRA → Cloud 3단 구조로 전환된다. 8초 Latency 제한 준수를 위한 Request Hedging, Cloud STT Circuit Breaker, 완벽 오프라인 처리 경로를 구현했다.
 
 **직접 만든 corpus로 Qwen2.5-7B LoRA fine-tuning.** 3년 치 한-불 설교 아카이브를 정규화하고 문장 단위로 정렬해 약 8K 쌍의 파라파이프라인 데이터셋을 구축했으며, Qwen2.5-7B LoRA 학습 후 Ollama로 로컬 서빙한다. 라이브 세션마다 도메인 맥락 데이터가 축적되는 Distillation Flywheel을 구축하고, Train/Eval 데이터 누수를 엄격히 격리했다.
 
-**실측으로 정한 guard.** STT 모델의 무음 구간 환각(Hallucination) 발화 생성을 방지하기 위해 실제 예배 음성 데이터에서 실측한 Logprob 분포 기반 필터링을 적용했다(발화 > -0.12, 환각 < -1.3). 사전 구축된 번역 캐시는 23회 예배 데이터 기준 전체 발화의 약 18%를 흡수/절감했다(세션별 3%~52%).
+**실측으로 정한 guard.** STT 모델의 무음 구간 환각(Hallucination) 발화 생성을 방지하기 위해 실제 라이브 음성 데이터에서 실측한 Logprob 분포 기반 필터링을 적용했다(발화 > -0.12, 환각 < -1.3). 사전 구축된 번역 캐시는 23회 라이브 데이터 기준 전체 발화의 약 18%를 흡수/절감했다(세션별 3%~52%).
 
 ---
 
