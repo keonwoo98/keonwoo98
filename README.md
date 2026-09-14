@@ -3,8 +3,6 @@
 AI engineer in Paris. I build LLM systems that have to be right, and run them in production.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-keonwoo--kim--profile-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/keonwoo-kim-profile/)
-[![CV](https://img.shields.io/badge/CV-PDF-444?logo=adobeacrobatreader&logoColor=white)](https://github.com/keonwoo98/keonwoo98/blob/main/Kim_Keonwoo_CV.pdf)
-[![CV (한국어)](https://img.shields.io/badge/CV-%ED%95%9C%EA%B5%AD%EC%96%B4-444?logo=adobeacrobatreader&logoColor=white)](https://github.com/keonwoo98/keonwoo98/blob/main/Kim_Keonwoo_CV_KR.pdf)
 [![Bonjour Admin](https://img.shields.io/badge/bonjouradmin.com-live-1F6F5B)](https://bonjouradmin.com)
 [![Email](https://img.shields.io/badge/keonwookim98%40gmail.com-D14836?logo=gmail&logoColor=white)](mailto:keonwookim98@gmail.com)
 

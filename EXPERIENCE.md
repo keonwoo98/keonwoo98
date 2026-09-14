@@ -1,7 +1,7 @@
 # Experience in detail
 
 The long version of my CV: what the problem was, what I decided, and how it turned out.
-한국어: [EXPERIENCE.ko.md](EXPERIENCE.ko.md) · CV (PDF): [Kim_Keonwoo_CV.pdf](Kim_Keonwoo_CV.pdf) · [LinkedIn](https://www.linkedin.com/in/keonwoo-kim-profile/) · [keonwookim98@gmail.com](mailto:keonwookim98@gmail.com)
+한국어: [EXPERIENCE.ko.md](EXPERIENCE.ko.md) · [LinkedIn](https://www.linkedin.com/in/keonwoo-kim-profile/) · [keonwookim98@gmail.com](mailto:keonwookim98@gmail.com)
 
 ---
 

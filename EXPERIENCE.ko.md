@@ -1,7 +1,7 @@
 # 경력 상세
 
 이력서의 긴 버전입니다. 어떤 문제가 있었고, 무엇을 어떻게 판단했고, 어떻게 됐는지를 적었습니다.
-English: [EXPERIENCE.md](EXPERIENCE.md) · 이력서 PDF: [Kim_Keonwoo_CV.pdf](Kim_Kim_Keonwoo_CV.pdf) · [LinkedIn](https://www.linkedin.com/in/keonwoo-kim-profile/) · [keonwookim98@gmail.com](mailto:keonwookim98@gmail.com)
+English: [EXPERIENCE.md](EXPERIENCE.md) · [LinkedIn](https://www.linkedin.com/in/keonwoo-kim-profile/) · [keonwookim98@gmail.com](mailto:keonwookim98@gmail.com)
 
 ---
 
